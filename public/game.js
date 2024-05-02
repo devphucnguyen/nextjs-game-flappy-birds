@@ -3,26 +3,13 @@ const scrn = document.getElementById("canvas");
 const sctx = scrn.getContext("2d");
 scrn.tabIndex = 1;
 
+let out_control_best = 0
+
 window.addEventListener('message', function (e) {
   const data = e.data;
-  if (data != 'on_tap_in_game') return
-
-  switch (state.curr) {
-    case state.getReady:
-      state.curr = state.Play;
-      SFX.start.play();
-      break;
-    case state.Play:
-      bird.flap();
-      break;
-    case state.gameOver:
-      state.curr = state.getReady;
-      bird.speed = 0;
-      bird.y = 100;
-      pipe.pipes = [];
-      UI.score.curr = 0;
-      SFX.played = false;
-      break;
+  if (data.message === "set_best") {
+    out_control_best = data.best
+    console.log('out_control_best: ', out_control_best);
   }
 });
 
@@ -112,7 +99,7 @@ const bg = {
 const pipe = {
   top: { sprite: new Image() },
   bot: { sprite: new Image() },
-  gap: 85,
+  gap: 95,
   moved: true,
   pipes: [],
   draw: function () {
@@ -182,6 +169,12 @@ const bird = {
         this.speed += this.gravity;
         if (this.y + r >= gnd.y || this.collisioned()) {
           state.curr = state.gameOver;
+
+          const postData = {
+            ...UI.score,
+            message: "game_over"
+          }
+          window.parent.postMessage(postData, '*');
         }
 
         break;
@@ -297,7 +290,7 @@ const UI = {
             localStorage.getItem("best")
           );
           localStorage.setItem("best", this.score.best);
-          let bs = `BEST  :     ${this.score.best}`;
+          let bs = `BEST  :     ${out_control_best}`;
           sctx.fillText(sc, scrn.width / 2 - 80, scrn.height / 2 + 0);
           sctx.strokeText(sc, scrn.width / 2 - 80, scrn.height / 2 + 0);
           sctx.fillText(bs, scrn.width / 2 - 80, scrn.height / 2 + 30);

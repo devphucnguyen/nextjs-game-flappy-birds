@@ -7,6 +7,8 @@ interface AuthState {
     reset: () => void;
 }
 
+// const dataTest = { name: "Tester", email: "test@gmail.com", phone: "0858136896" };
+
 const useAuthStore = create<AuthState>()((set) => ({
     userInfo: undefined,
     update: (by: IWhoAmI | undefined) =>

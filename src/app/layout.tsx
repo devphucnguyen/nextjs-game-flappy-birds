@@ -1,39 +1,71 @@
 "use client";
 
-import { IWhoAmI } from "@/model/user";
+import api from "@/api";
+import { COLOR } from "@/const/color";
+import { ISession } from "@/model/user";
 import LocalStore, { LOCAL_STORAGE } from "@/service/localStore";
 import useAuthStore from "@/store/useAuthStore";
-import { useEffect } from "react";
-import "./globals.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
-import { COLOR } from "@/const/color";
+import { useEffect, useState } from "react";
+import "./globals.css";
 
-export default function RootLayout({
+const queryClient = new QueryClient();
+
+const RootLayout = ({
     children,
 }: Readonly<{
     children: React.ReactNode;
-}>) {
+}>) => {
     const { update } = useAuthStore();
 
     useEffect(() => {
-        const session = LocalStore.getItem<IWhoAmI>(LOCAL_STORAGE.SESSION);
-
-        if (session) {
-            update(session);
-        }
+        fetUserData();
     }, []);
+
+    const fetUserData = async () => {
+        const session = LocalStore.getItem<ISession>(LOCAL_STORAGE.SESSION);
+        if (!session?.access_token) return;
+
+        const whoamiData = await api.whoami();
+        update(whoamiData);
+        LocalStore.setItem(LOCAL_STORAGE.USER_INFO, whoamiData);
+    };
 
     return (
         <html lang="en">
-            <ConfigProvider
-                theme={{
-                    token: {
-                        colorPrimary: COLOR.BLUE,
-                    },
-                }}
-            >
-                <body style={{ maxWidth: 700 }}>{children}</body>
-            </ConfigProvider>
+            <body className="m-auto">
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            colorPrimary: COLOR.BLUE,
+                        },
+                    }}
+                >
+                    <QueryClientProvider client={queryClient}>
+                        {/* <ConfirmAfterPlay /> */}
+                        {children}
+                    </QueryClientProvider>
+                </ConfigProvider>
+            </body>
         </html>
     );
+};
+
+export default RootLayout;
+
+
+
+function ProfilePage({ userId }: any) {
+    const [userInfo, setUserInfo] = useState();
+
+    useEffect(() => {
+        // Call api set user info
+    }, []);
+
+    return <Profile userInfo={userInfo} />;
 }
+
+const Profile = ({ userInfo }: any) => {
+    return <div>{userInfo.name}</div>;
+};

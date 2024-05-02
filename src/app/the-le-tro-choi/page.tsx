@@ -1,12 +1,15 @@
-import Navigation from "@/component/Navigation";
+"use client";
 
-const Rule = () => {
+import Navigation from "@/component/Navigation";
+import GameRules from "@/component/GameRules";
+
+const RulePage = () => {
     return (
         <>
             <Navigation />
-            <h1 className="p-10">the le trò chơi</h1>
+            <GameRules />
         </>
     );
 };
 
-export default Rule;
+export default RulePage;

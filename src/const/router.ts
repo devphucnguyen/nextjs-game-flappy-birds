@@ -10,6 +10,6 @@ const PATH_NAME_PROD = {
     RULE: "/the-le-tro-choi.html",
 };
 
-const PATH_NAME = process.env.mode === "local" ? PATH_NAME_LOCAL : PATH_NAME_PROD;
+const PATH_NAME = process.env.NEXT_PUBLIC_MODE === "local" ? PATH_NAME_LOCAL : PATH_NAME_PROD;
 
 export default PATH_NAME;
