@@ -99,7 +99,7 @@ const bg = {
 const pipe = {
   top: { sprite: new Image() },
   bot: { sprite: new Image() },
-  gap: 95,
+  gap: 120,
   moved: true,
   pipes: [],
   draw: function () {
@@ -310,18 +310,20 @@ const UI = {
   },
 };
 
-gnd.sprite.src = "img/ground.png";
-bg.sprite.src = "img/BG.png";
-pipe.top.sprite.src = "img/toppipe.png";
-pipe.bot.sprite.src = "img/botpipe.png";
-UI.gameOver.sprite.src = "img/go.png";
-UI.getReady.sprite.src = "img/getready.png";
-UI.tap[0].sprite.src = "img/tap/t0.png";
-UI.tap[1].sprite.src = "img/tap/t1.png";
-bird.animations[0].sprite.src = "img/bird/b0.png";
-bird.animations[1].sprite.src = "img/bird/b1.png";
-bird.animations[2].sprite.src = "img/bird/b2.png";
-bird.animations[3].sprite.src = "img/bird/b0.png";
+const currentTime = new Date().getTime()
+
+gnd.sprite.src = `img/ground.png?v=${currentTime}`;
+bg.sprite.src = `img/BG.png?v=${currentTime}`;
+pipe.top.sprite.src = `img/toppipe.png?v=${currentTime}`;
+pipe.bot.sprite.src = `img/botpipe.png?v=${currentTime}`;
+UI.gameOver.sprite.src = `img/go.png?v=${currentTime}`;
+UI.getReady.sprite.src = `img/getready.png?v=${currentTime}`;
+UI.tap[0].sprite.src = `img/tap/t0.png?v=${currentTime}`;
+UI.tap[1].sprite.src = `img/tap/t1.png?v=${currentTime}`;
+bird.animations[0].sprite.src = `img/bird/b0.png?v=${currentTime}`;
+bird.animations[1].sprite.src = `img/bird/b1.png?v=${currentTime}`;
+bird.animations[2].sprite.src = `img/bird/b2.png?v=${currentTime}`;
+bird.animations[3].sprite.src = `img/bird/b0.png?v=${currentTime}`;
 SFX.start.src = "sfx/start.wav";
 SFX.flap.src = "sfx/flap.wav";
 SFX.score.src = "sfx/score.wav";
